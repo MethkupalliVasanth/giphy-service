@@ -27,9 +27,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GiphyTransformer {
 
-    @Autowired
-    private GiphyMapper giphyMapper;
-
     public ListGiphyResponse transformGiphyResponse(HttpResponse response) throws IOException {
         HttpEntity entity = response.getEntity();
         Header contentEncodingHeader = entity.getContentEncoding();
@@ -56,15 +53,12 @@ public class GiphyTransformer {
         } else {
             List<GiphyResponse> gifyRequestList = new ArrayList<>();
             ListGiphyResponse listGiphyResponse = new ListGiphyResponse();
+            ObjectMapper objectMapper = new ObjectMapper();
 
             for (Map<String, Object> entry : gifyHashMapList) {
-//                GiphyResponse giphyResponse = new GiphyResponse();
-//                giphyResponse.setGifId(entry.get("id").toString());
-//                giphyResponse.setUrl(entry.get("url").toString());
-                ObjectMapper objectMapper = new ObjectMapper();
 
                 GiphyRequest giphyRequest = objectMapper.convertValue(entry, GiphyRequest.class);
-                GiphyResponse giphyResponse = giphyMapper.giphyResponseToListGiphyResponse(giphyRequest);
+                GiphyResponse giphyResponse = GiphyMapper.INSTANCE.giphyResponseToListGiphyResponse(giphyRequest);
                 gifyRequestList.add(giphyResponse);
 
             }
