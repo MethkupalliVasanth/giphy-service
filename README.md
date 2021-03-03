@@ -1,8 +1,8 @@
-#GIPHY SERVICE
+# GIPHY SERVICE
 
 `Prerequisites: Install Docker`
 
-###Clean Build
+### Clean Build
  For a clean build, install Java 11 and Maven version 3.6.3  
 `mvn clean install`
 
