@@ -4,6 +4,7 @@ import com.example.giphyservice.dto.GiphyMapper;
 import com.example.giphyservice.dto.GiphyRequest;
 import com.example.giphyservice.dto.ListGiphyResponse;
 import com.example.giphyservice.dto.GiphyResponse;
+import com.example.giphyservice.exception.ISCRestAPIGeneralException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
@@ -27,7 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GiphyTransformer {
 
-    public ListGiphyResponse transformGiphyResponse(HttpResponse response) throws IOException {
+    public ListGiphyResponse transformGiphyResponse(HttpResponse response)  {
         HttpEntity entity = response.getEntity();
         Header contentEncodingHeader = entity.getContentEncoding();
 
@@ -39,17 +40,25 @@ public class GiphyTransformer {
                     break;
                 }
             }
+
+            String output;
+            try {
+                output = EntityUtils.toString(entity, Charset.forName("UTF-8").name());
+            } catch (Exception e) {
+                throw new ISCRestAPIGeneralException(e.getMessage());
+            }
+            JSONObject jsonObject = new JSONObject(output);
+            List<HashMap<String, Object>> jsonList = (List<HashMap<String, Object>>) jsonObject.toMap().get("data");
+            return getGiphyResponseFromJson(jsonList);
+        } else {
+            throw new ISCRestAPIGeneralException("Invalid Auth Credentials, check the API key");
         }
 
-        String output = EntityUtils.toString(entity, Charset.forName("UTF-8").name());
-        JSONObject jsonObject = new JSONObject(output);
-        List<HashMap<String, Object>> jsonList = (List<HashMap<String, Object>>) jsonObject.toMap().get("data");
-        return getGiphyResponseFromJson(jsonList);
     }
 
     public ListGiphyResponse getGiphyResponseFromJson(List<HashMap<String, Object>> gifyHashMapList) {
         if (gifyHashMapList.size() < 5) {
-            return new ListGiphyResponse();
+            throw new ISCRestAPIGeneralException("Request GIF invalid");
         } else {
             List<GiphyResponse> gifyRequestList = new ArrayList<>();
             ListGiphyResponse listGiphyResponse = new ListGiphyResponse();

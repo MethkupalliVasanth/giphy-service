@@ -1,6 +1,7 @@
 package com.example.giphyservice.transformer;
 
 import com.example.giphyservice.dto.ListGiphyResponse;
+import com.example.giphyservice.exception.ISCRestAPIGeneralException;
 import org.apache.http.HttpResponse;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -77,7 +78,7 @@ public class GiphyTransformerTest {
         assertEquals(listGiphyResponse.getGiphyResponseList().get(4).getGifId(),"timon");
     }
 
-    @Test
+    @Test(expectedExceptions = ISCRestAPIGeneralException.class)
     public void test_getGiphyResponseFromJson_happyPath_lessThan5() {
         ArrayList<HashMap<String, Object>> gifyResponseList = new ArrayList<>();
 

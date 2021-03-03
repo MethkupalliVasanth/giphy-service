@@ -14,14 +14,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 @Controller
-public class GiphyController {
+public class GiphyController extends BaseController {
 
     @Autowired
     private GiphyService giphyService;
 
     @GetMapping(path = "/search/{searchTerm}")
-    public ResponseEntity<ListGiphyResponse> getGify(@PathVariable String searchTerm) throws URISyntaxException, IOException {
-        return new ResponseEntity<>(giphyService.getGify(searchTerm), HttpStatus.OK);
+    public @ResponseBody ListGiphyResponse getGify(@PathVariable String searchTerm) throws URISyntaxException, IOException {
+        return giphyService.getGify(searchTerm);
     }
 }
 
