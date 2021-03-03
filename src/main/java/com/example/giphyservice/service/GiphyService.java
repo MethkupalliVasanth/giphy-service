@@ -71,13 +71,7 @@ public class GiphyService {
             throw new ISCRestAPIGeneralException(e.getMessage());
         }
 
-//        Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-//
-//        List<Header> headers = new ArrayList<>();
-//        headers.add(header);
-
         builder.setParameter("api_key", apiKey).setParameter("q", searchTerm).setParameter("limit", "5");
-
 
         HttpGet httpGet;
         try {
