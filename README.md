@@ -19,7 +19,7 @@
 
 API endpoint to test it with
 
-http://localhost:8081/search/cheese
+http://localhost:8081/search/cheese  
 http://localhost:8081/search/{search_term}
 
 API Key is stored in application.properties. Can modify that for other keys and do a clean build
